@@ -151,6 +151,8 @@ export function getUserUrls(req, res) {
   }
 }
 
+import { parseUserAgent } from '../utils/uaParser.js';
+
 export function getUrlStats(req, res) {
   try {
     const userId = req.user.id;
@@ -162,12 +164,41 @@ export function getUrlStats(req, res) {
     }
 
     const clicks = db.prepare(`
-      SELECT id, referrer, user_agent, created_at 
+      SELECT id, referrer, user_agent, ip_hash, created_at 
       FROM clicks 
       WHERE url_id = ? 
       ORDER BY created_at DESC 
       LIMIT 100
     `).all(id);
+
+    // Calculate aggregated metrics
+    const referrerCounts = {};
+    const browserCounts = {};
+    const osCounts = {};
+    const deviceCounts = {};
+
+    const formattedClicks = clicks.map(c => {
+      const uaInfo = parseUserAgent(c.user_agent);
+      const ref = c.referrer && c.referrer.trim() ? c.referrer.trim() : 'Direct';
+
+      referrerCounts[ref] = (referrerCounts[ref] || 0) + 1;
+      browserCounts[uaInfo.browser] = (browserCounts[uaInfo.browser] || 0) + 1;
+      osCounts[uaInfo.os] = (osCounts[uaInfo.os] || 0) + 1;
+      deviceCounts[uaInfo.device] = (deviceCounts[uaInfo.device] || 0) + 1;
+
+      return {
+        id: c.id,
+        referrer: ref,
+        userAgent: c.user_agent,
+        browser: uaInfo.browser,
+        os: uaInfo.os,
+        device: uaInfo.device,
+        icon: uaInfo.icon,
+        summary: uaInfo.summary,
+        ipHash: c.ip_hash,
+        createdAt: c.created_at
+      };
+    });
 
     return res.json({
       url: {
@@ -180,7 +211,14 @@ export function getUrlStats(req, res) {
         isActive: Boolean(url.is_active),
         createdAt: url.created_at
       },
-      clickHistory: clicks
+      summary: {
+        totalClicks: url.clicks,
+        topReferrers: referrerCounts,
+        topBrowsers: browserCounts,
+        topDevices: deviceCounts,
+        topOS: osCounts
+      },
+      clickHistory: formattedClicks
     });
   } catch (err) {
     console.error('Get URL stats error:', err);

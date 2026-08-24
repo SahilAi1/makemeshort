@@ -65,19 +65,23 @@
   flex: 1;
   display: flex;
   align-items: center;
+  width: 100%;
 }
 
 .url-input-icon {
   position: absolute;
-  left: 1.25rem;
+  left: 1.15rem;
   color: var(--text-subtle);
   pointer-events: none;
   font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  z-index: 2;
 }
 
 .shortener-input {
   width: 100%;
-  padding: 1.1rem 3.5rem 1.1rem 3.2rem;
+  padding: 1.1rem 5.75rem 1.1rem 3.2rem; /* Ensure text never overlaps the PASTE button */
   background: rgba(10, 15, 30, 0.95);
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: var(--radius-md);
@@ -85,6 +89,7 @@
   font-size: 1.05rem;
   transition: all var(--transition-normal);
   outline: none;
+  height: 56px;
 }
 
 .shortener-input:focus {
@@ -94,21 +99,29 @@
 
 .paste-btn {
   position: absolute;
-  right: 0.75rem;
-  background: rgba(255, 255, 255, 0.08);
-  border: none;
-  color: var(--text-muted);
-  padding: 0.4rem 0.65rem;
+  right: 0.65rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(99, 102, 241, 0.18);
+  border: 1px solid rgba(99, 102, 241, 0.4);
+  color: #c7d2fe;
+  padding: 0.35rem 0.75rem;
   border-radius: var(--radius-sm);
   font-size: 0.75rem;
-  font-weight: 600;
+  font-weight: 700;
+  letter-spacing: 0.5px;
   cursor: pointer;
   transition: all var(--transition-fast);
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .paste-btn:hover {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(99, 102, 241, 0.35);
   color: #ffffff;
+  border-color: rgba(99, 102, 241, 0.6);
 }
 
 .shorten-submit-btn {
@@ -116,6 +129,7 @@
   font-size: 1.05rem;
   font-weight: 600;
   white-space: nowrap;
+  height: 56px;
 }
 
 /* Result Box */
@@ -123,7 +137,7 @@
   margin-top: 1.5rem;
   padding: 1.25rem 1.5rem;
   background: rgba(16, 24, 44, 0.9);
-  border: 1px solid rgba(99, 102, 241, 0.3);
+  border: 1px solid rgba(99, 102, 241, 0.35);
   border-radius: var(--radius-md);
   display: flex;
   align-items: center;
@@ -138,23 +152,23 @@
   gap: 0.35rem;
   overflow: hidden;
   text-align: left;
+  flex: 1;
 }
 
 .result-original {
   font-size: 0.85rem;
   color: var(--text-subtle);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 450px;
+  word-break: break-all;
+  max-width: 100%;
 }
 
 .result-short-url {
-  font-size: 1.2rem;
+  font-size: 1.25rem;
   font-weight: 700;
   color: #38bdf8;
   letter-spacing: -0.3px;
   text-decoration: none;
+  word-break: break-all;
 }
 
 .result-short-url:hover {
@@ -165,6 +179,7 @@
   display: flex;
   align-items: center;
   gap: 0.65rem;
+  flex-shrink: 0;
 }
 
 /* Quick History */
@@ -178,6 +193,8 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
 }
 
 .history-title {
@@ -193,44 +210,52 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem 1.25rem;
+  padding: 1.1rem 1.25rem;
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   margin-bottom: 0.75rem;
   transition: all var(--transition-fast);
+  gap: 1rem;
 }
 
 .history-item:hover {
-  border-color: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.18);
   background: var(--bg-card-hover);
 }
 
 .history-details {
   display: flex;
   flex-direction: column;
-  gap: 0.2rem;
+  gap: 0.25rem;
   overflow: hidden;
+  flex: 1;
+  text-align: left;
 }
 
 .history-short {
-  font-weight: 600;
+  font-weight: 700;
   color: #38bdf8;
-  font-size: 0.95rem;
+  font-size: 1.05rem;
+  word-break: break-all;
+  text-decoration: none;
+}
+
+.history-short:hover {
+  text-decoration: underline;
 }
 
 .history-dest {
-  font-size: 0.8rem;
+  font-size: 0.825rem;
   color: var(--text-subtle);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 400px;
+  word-break: break-all;
 }
 
 .history-actions {
   display: flex;
+  align-items: center;
   gap: 0.5rem;
+  flex-shrink: 0;
 }
 
 /* Features Grid */
@@ -260,7 +285,7 @@
 
 .features-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1.75rem;
   text-align: left;
 }
@@ -314,7 +339,7 @@
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: var(--radius-xl);
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 2rem;
   text-align: center;
 }
@@ -354,27 +379,92 @@
   gap: 1rem;
 }
 
-/* Responsive */
+/* Responsive Overhauls for Mobile & Tablet */
 @media (max-width: 768px) {
+  .hero {
+    padding: 3.5rem 0 2rem;
+  }
   .hero-title {
-    font-size: 2.25rem;
+    font-size: 2.35rem;
+    letter-spacing: -1px;
+  }
+  .hero-subtitle {
+    font-size: 1.05rem;
+    margin-bottom: 2.25rem;
+  }
+  .shortener-box {
+    padding: 1.25rem;
+    margin-bottom: 3rem;
   }
   .shortener-form {
     flex-direction: column;
+    gap: 0.75rem;
+  }
+  .shortener-input {
+    padding: 0.9rem 5.5rem 0.9rem 2.75rem;
+    font-size: 0.95rem;
+    height: 52px;
+  }
+  .url-input-icon {
+    left: 0.9rem;
   }
   .shorten-submit-btn {
     width: 100%;
-    padding: 0.9rem;
+    height: 50px;
+    padding: 0.75rem;
+    font-size: 1rem;
   }
   .result-card {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
+    gap: 1rem;
+    padding: 1.15rem;
   }
   .result-actions {
     width: 100%;
-    justify-content: flex-start;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
   }
-  .result-original, .history-dest {
-    max-width: 260px;
+  .result-actions .btn {
+    width: 100%;
+    padding: 0.6rem 0.5rem;
+  }
+  .history-item {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.85rem;
+    padding: 1rem;
+  }
+  .history-actions {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+  }
+  .history-actions .btn {
+    width: 100%;
+    padding: 0.6rem 0.5rem;
+  }
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+  .stats-banner {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 2rem 1.25rem;
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-title {
+    font-size: 1.95rem;
+  }
+  .hero-badge {
+    font-size: 0.75rem;
+    padding: 0.3rem 0.75rem;
+  }
+  .stats-banner {
+    grid-template-columns: 1fr;
   }
 }
