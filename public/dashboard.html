@@ -163,27 +163,42 @@
 
   <!-- Analytics Modal -->
   <div class="modal-overlay" id="analytics-modal">
-    <div class="modal-container" style="max-width: 540px;">
-      <div class="modal-header">
+    <div class="modal-container analytics-modal-container">
+      <div class="modal-header" style="margin-bottom: 1rem;">
         <div>
           <h3 class="modal-title" id="analytics-link-title">Link Analytics</h3>
-          <a href="#" target="_blank" id="analytics-short-url" style="font-size: 0.85rem; color: #38bdf8; font-weight: 600;"></a>
+          <a href="#" target="_blank" id="analytics-short-url" style="font-size: 0.85rem; color: #38bdf8; font-weight: 600; word-break: break-all;"></a>
         </div>
         <button class="modal-close" id="analytics-modal-close">✕</button>
       </div>
-      <div class="analytics-summary-box">
-        <div class="analytics-stat-tile">
-          <div class="analytics-stat-num" id="analytics-total-clicks">0</div>
-          <div class="analytics-stat-lbl">Total Visits</div>
+      <div class="analytics-content-scroll">
+        <div class="analytics-summary-box">
+          <div class="analytics-stat-tile">
+            <div class="analytics-stat-num" id="analytics-total-clicks">0</div>
+            <div class="analytics-stat-lbl">Total Visits</div>
+          </div>
+          <div class="analytics-stat-tile">
+            <div class="analytics-stat-num" id="analytics-created" style="font-size: 1.1rem; margin-top: 0.25rem;">—</div>
+            <div class="analytics-stat-lbl">Date Created</div>
+          </div>
+          <div class="analytics-stat-tile">
+            <div class="analytics-stat-num" id="analytics-top-device" style="font-size: 1.1rem; margin-top: 0.25rem;">—</div>
+            <div class="analytics-stat-lbl">Top Device</div>
+          </div>
         </div>
-        <div class="analytics-stat-tile">
-          <div class="analytics-stat-num" id="analytics-created" style="font-size: 1.15rem; margin-top: 0.25rem;">—</div>
-          <div class="analytics-stat-lbl">Date Created</div>
+
+        <div>
+          <h4 style="font-size: 0.825rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem;">Platform & Referrer Insights</h4>
+          <div id="analytics-breakdowns" class="analytics-breakdown-row"></div>
         </div>
-      </div>
-      <div>
-        <h4 style="font-size: 0.9rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.75rem;">Recent Click Logs</h4>
-        <div id="analytics-logs-list" class="clicks-history-list"></div>
+
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem;">
+            <h4 style="font-size: 0.825rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Click History Log</h4>
+            <span style="font-size: 0.75rem; color: var(--text-subtle);">Click row for full headers</span>
+          </div>
+          <div id="analytics-logs-list" class="clicks-history-list"></div>
+        </div>
       </div>
     </div>
   </div>

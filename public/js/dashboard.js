@@ -318,6 +318,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   }
 
+  const analyticsTopDevice = document.getElementById('analytics-top-device');
+  const analyticsBreakdowns = document.getElementById('analytics-breakdowns');
+
   // Analytics Modal
   async function openAnalyticsModal(id) {
     if (!analyticsModal) return;
@@ -331,24 +334,99 @@ document.addEventListener('DOMContentLoaded', async () => {
         month: 'short', day: 'numeric', year: 'numeric'
       });
 
+      // Compute Top Device
+      const devices = data.summary?.topDevices || {};
+      const topDeviceName = Object.keys(devices).sort((a, b) => devices[b] - devices[a])[0] || 'Desktop';
+      if (analyticsTopDevice) analyticsTopDevice.textContent = topDeviceName;
+
+      // Render breakdown pills
+      if (analyticsBreakdowns) {
+        const pills = [];
+        if (data.summary) {
+          const browsers = data.summary.topBrowsers || {};
+          Object.entries(browsers).slice(0, 3).forEach(([browser, count]) => {
+            if (browser && browser !== 'Unknown') pills.push(`<span class="breakdown-pill">🌐 ${escapeHtml(browser)} (${count})</span>`);
+          });
+
+          const referrers = data.summary.topReferrers || {};
+          Object.entries(referrers).slice(0, 3).forEach(([ref, count]) => {
+            if (ref) pills.push(`<span class="breakdown-pill">🔗 ${escapeHtml(ref)} (${count})</span>`);
+          });
+
+          const oss = data.summary.topOS || {};
+          Object.entries(oss).slice(0, 2).forEach(([os, count]) => {
+            if (os && os !== 'Unknown') pills.push(`<span class="breakdown-pill">💻 ${escapeHtml(os)} (${count})</span>`);
+          });
+        }
+
+        analyticsBreakdowns.innerHTML = pills.length > 0 ? pills.join('') : '<span style="font-size: 0.8rem; color: var(--text-subtle);">No visitor patterns recorded yet</span>';
+      }
+
+      // Render expandable click logs
       if (!data.clickHistory || data.clickHistory.length === 0) {
         analyticsLogs.innerHTML = `
-          <div style="padding: 1.5rem; text-align: center; color: var(--text-subtle); font-size: 0.9rem;">
-            No click logs recorded yet. Visit the link to test tracking!
+          <div style="padding: 2rem 1rem; text-align: center; color: var(--text-subtle); font-size: 0.9rem; background: rgba(255,255,255,0.02); border-radius: var(--radius-md);">
+            No click logs recorded yet. Visit the short link to test tracking!
           </div>
         `;
       } else {
-        analyticsLogs.innerHTML = data.clickHistory.map(log => `
-          <div class="click-log-item">
-            <div>
-              <div class="click-log-referrer">${escapeHtml(log.referrer || 'Direct visit')}</div>
-              <div style="font-size: 0.75rem; color: var(--text-subtle);">${escapeHtml(log.user_agent ? log.user_agent.substring(0, 45) + '...' : 'Browser')}</div>
+        analyticsLogs.innerHTML = data.clickHistory.map((log, index) => `
+          <div class="click-log-accordion" id="click-accordion-${index}">
+            <div class="click-log-summary" data-index="${index}">
+              <div class="click-log-main">
+                <span class="click-log-icon">${log.icon || '💻'}</span>
+                <span class="click-log-title">${escapeHtml(log.summary || 'Direct visit')}</span>
+                <span class="click-log-ref-tag">${escapeHtml(log.referrer || 'Direct')}</span>
+              </div>
+              <div class="click-log-meta">
+                <span class="click-log-time">${new Date(log.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} • ${new Date(log.createdAt).toLocaleDateString([], { month: 'short', day: 'numeric' })}</span>
+                <span class="click-log-chevron">▼</span>
+              </div>
             </div>
-            <div class="click-log-time">
-              ${new Date(log.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} • ${new Date(log.created_at).toLocaleDateString([], { month: 'short', day: 'numeric' })}
+            <div class="click-log-details">
+              <div class="detail-row">
+                <span class="detail-label">Platform:</span>
+                <span class="detail-value">${escapeHtml(log.browser || 'Unknown')} on ${escapeHtml(log.os || 'Unknown')} (${escapeHtml(log.device || 'Desktop')})</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Referrer:</span>
+                <span class="detail-value">${escapeHtml(log.referrer || 'Direct visit')}</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Timestamp:</span>
+                <span class="detail-value">${new Date(log.createdAt).toLocaleString()}</span>
+              </div>
+              ${log.ipHash ? `
+              <div class="detail-row">
+                <span class="detail-label">IP Fingerprint:</span>
+                <span class="detail-value" style="font-family: monospace; font-size: 0.75rem; color: #a5b4fc;">${escapeHtml(log.ipHash)}</span>
+              </div>` : ''}
+              <div style="margin-top: 0.25rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
+                  <span class="detail-label">Raw User-Agent:</span>
+                  <button type="button" class="btn btn-ghost btn-sm copy-ua-btn" data-ua="${escapeHtml(log.userAgent || '')}" style="padding: 0.15rem 0.4rem; font-size: 0.7rem;">Copy UA</button>
+                </div>
+                <div class="ua-code-box">${escapeHtml(log.userAgent || 'No user agent captured')}</div>
+              </div>
             </div>
           </div>
         `).join('');
+
+        // Attach accordion click listeners
+        analyticsLogs.querySelectorAll('.click-log-summary').forEach(header => {
+          header.addEventListener('click', () => {
+            const parent = header.closest('.click-log-accordion');
+            if (parent) parent.classList.toggle('open');
+          });
+        });
+
+        // Attach Copy UA listeners
+        analyticsLogs.querySelectorAll('.copy-ua-btn').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            copyToClipboard(btn.dataset.ua, 'Raw User-Agent copied!');
+          });
+        });
       }
 
       analyticsModal.classList.add('active');
