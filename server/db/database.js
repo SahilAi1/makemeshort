@@ -1,5 +1,13 @@
+import fs from 'fs';
+import path from 'path';
 import Database from 'better-sqlite3';
 import { config } from '../config/config.js';
+
+// Ensure directory exists for SQLite database file
+const dbDir = path.dirname(config.dbPath);
+if (!fs.existsSync(dbDir)) {
+  fs.mkdirSync(dbDir, { recursive: true });
+}
 
 const db = new Database(config.dbPath);
 
