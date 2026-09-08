@@ -2,8 +2,31 @@ import { request, showToast, copyToClipboard, escapeHtml } from './api.js';
 import { setupAuthUI } from './auth.js';
 
 document.addEventListener('DOMContentLoaded', () => {
-  const auth = setupAuthUI();
+  setupAuthUI();
 
+  // Tab navigation
+  const tabShortLink = document.getElementById('tab-short-link');
+  const tabQrCode = document.getElementById('tab-qr-code');
+  const panelShortLink = document.getElementById('panel-short-link');
+  const panelQrCode = document.getElementById('panel-qr-code');
+
+  if (tabShortLink && tabQrCode && panelShortLink && panelQrCode) {
+    tabShortLink.addEventListener('click', () => {
+      tabShortLink.classList.add('active');
+      tabQrCode.classList.remove('active');
+      panelShortLink.style.display = 'block';
+      panelQrCode.style.display = 'none';
+    });
+
+    tabQrCode.addEventListener('click', () => {
+      tabQrCode.classList.add('active');
+      tabShortLink.classList.remove('active');
+      panelQrCode.style.display = 'block';
+      panelShortLink.style.display = 'none';
+    });
+  }
+
+  // Shortener form elements
   const shortenForm = document.getElementById('landing-shorten-form');
   const urlInput = document.getElementById('landing-url-input');
   const pasteBtn = document.getElementById('paste-btn');
@@ -12,10 +35,19 @@ document.addEventListener('DOMContentLoaded', () => {
   const resultShortUrl = document.getElementById('result-short-url');
   const resultOrigUrl = document.getElementById('result-orig-url');
   const resultCopyBtn = document.getElementById('result-copy-btn');
+  const copyBtnText = document.getElementById('copy-btn-text');
   const resultQrBtn = document.getElementById('result-qr-btn');
   const historyContainer = document.getElementById('guest-history-container');
   const historyList = document.getElementById('guest-history-list');
   const clearHistoryBtn = document.getElementById('clear-history-btn');
+
+  // Direct QR panel elements
+  const directQrInput = document.getElementById('direct-qr-input');
+  const directQrPaste = document.getElementById('direct-qr-paste');
+  const directQrGenerateBtn = document.getElementById('direct-qr-generate-btn');
+  const directQrResult = document.getElementById('direct-qr-result');
+  const directQrImg = document.getElementById('direct-qr-img');
+  const directQrDownload = document.getElementById('direct-qr-download');
 
   // QR Modal elements
   const qrModal = document.getElementById('qr-modal');
@@ -38,10 +70,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function saveToGuestHistory(item) {
     const history = getGuestHistory();
-    // Prepend and avoid duplicate short codes, keep max 10
     const filtered = history.filter(h => h.shortCode !== item.shortCode);
     filtered.unshift(item);
-    localStorage.setItem('makemeshort_guest_history', JSON.stringify(filtered.slice(0, 10)));
+    localStorage.setItem('makemeshort_guest_history', JSON.stringify(filtered.slice(0, 8)));
     renderGuestHistory();
   }
 
@@ -74,10 +105,13 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
     `).join('');
 
-    // Attach event listeners
+    // Attach event listeners for history actions
     historyList.querySelectorAll('.copy-history-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        copyToClipboard(btn.dataset.url);
+      btn.addEventListener('click', async () => {
+        await copyToClipboard(btn.dataset.url, 'Copied to clipboard!');
+        const origText = btn.innerHTML;
+        btn.innerHTML = '✓ Copied';
+        setTimeout(() => { btn.innerHTML = origText; }, 1800);
       });
     });
 
@@ -99,13 +133,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Paste button
+  // Paste button handler
   if (pasteBtn && urlInput) {
     pasteBtn.addEventListener('click', async () => {
       try {
         const text = await navigator.clipboard.readText();
         if (text) {
-          urlInput.value = text;
+          urlInput.value = text.trim();
           urlInput.focus();
         }
       } catch (err) {
@@ -114,21 +148,21 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Form submission
+  // Form submission handler
   if (shortenForm) {
     shortenForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       const rawUrl = urlInput.value.trim();
 
       if (!rawUrl) {
-        showToast('Please paste or enter a URL', 'error');
+        showToast('Please enter a URL to shorten', 'error');
         return;
       }
 
       submitBtn.disabled = true;
       submitBtn.innerHTML = `
         <svg class="animate-spin" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10" stroke-width="4" stroke="currentColor" opacity="0.25"></circle><path fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
-        Shortening...
+        <span>Shortening...</span>
       `;
 
       try {
@@ -149,8 +183,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // Save to guest history
         saveToGuestHistory(res);
 
-        // Auto copy to clipboard for convenience
-        await copyToClipboard(res.shortUrl, 'Shortened link created & copied to clipboard!');
+        // Auto copy to clipboard for user convenience
+        await copyToClipboard(res.shortUrl, 'Short link created & copied to clipboard!');
+        if (copyBtnText) copyBtnText.textContent = 'Copied!';
+        setTimeout(() => { if (copyBtnText) copyBtnText.textContent = 'Copy Link'; }, 2500);
 
         urlInput.value = '';
       } catch (err) {
@@ -158,8 +194,10 @@ document.addEventListener('DOMContentLoaded', () => {
       } finally {
         submitBtn.disabled = false;
         submitBtn.innerHTML = `
-          <span>Shorten URL</span>
-          <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+          <span>Get your link for free</span>
+          <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/>
+          </svg>
         `;
       }
     });
@@ -167,9 +205,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Result card actions
   if (resultCopyBtn) {
-    resultCopyBtn.addEventListener('click', () => {
+    resultCopyBtn.addEventListener('click', async () => {
       if (resultShortUrl.textContent) {
-        copyToClipboard(resultShortUrl.textContent);
+        await copyToClipboard(resultShortUrl.textContent, 'Copied short link to clipboard!');
+        if (copyBtnText) copyBtnText.textContent = 'Copied!';
+        setTimeout(() => { if (copyBtnText) copyBtnText.textContent = 'Copy Link'; }, 2000);
       }
     });
   }
@@ -178,6 +218,55 @@ document.addEventListener('DOMContentLoaded', () => {
     resultQrBtn.addEventListener('click', () => {
       if (currentQrData) {
         openQrModal(currentQrData.url, currentQrData.qrCode);
+      }
+    });
+  }
+
+  // Direct QR Code panel logic
+  if (directQrPaste && directQrInput) {
+    directQrPaste.addEventListener('click', async () => {
+      try {
+        const text = await navigator.clipboard.readText();
+        if (text) {
+          directQrInput.value = text.trim();
+          directQrInput.focus();
+        }
+      } catch {
+        directQrInput.focus();
+      }
+    });
+  }
+
+  if (directQrGenerateBtn && directQrInput) {
+    directQrGenerateBtn.addEventListener('click', async () => {
+      const val = directQrInput.value.trim();
+      if (!val) {
+        showToast('Please enter a link or text to generate a QR code', 'error');
+        return;
+      }
+
+      directQrGenerateBtn.disabled = true;
+      directQrGenerateBtn.innerHTML = 'Generating...';
+
+      try {
+        const res = await request(`/api/urls/qr?url=${encodeURIComponent(val)}`);
+        if (res && res.qrCode) {
+          directQrImg.src = res.qrCode;
+          directQrDownload.href = res.qrCode;
+          directQrDownload.download = `qrcode-${Date.now()}.png`;
+          directQrResult.style.display = 'flex';
+          showToast('QR code generated successfully!', 'success');
+        }
+      } catch (err) {
+        showToast(err.message, 'error');
+      } finally {
+        directQrGenerateBtn.disabled = false;
+        directQrGenerateBtn.innerHTML = `
+          <span>Generate QR Code</span>
+          <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/>
+          </svg>
+        `;
       }
     });
   }
@@ -210,9 +299,10 @@ document.addEventListener('DOMContentLoaded', () => {
       qrMouseDown = false;
     });
   }
+
   if (qrModalCopy) {
-    qrModalCopy.addEventListener('click', () => {
-      copyToClipboard(qrModalUrl.textContent);
+    qrModalCopy.addEventListener('click', async () => {
+      await copyToClipboard(qrModalUrl.textContent, 'Copied link to clipboard!');
     });
   }
 
@@ -224,5 +314,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Initial render of history
   renderGuestHistory();
 });

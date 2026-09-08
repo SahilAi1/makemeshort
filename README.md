@@ -17,7 +17,7 @@ A modern, high-performance, full-stack URL shortener featuring instant **Guest Q
   - Strict protocol enforcement (`https://`, `http://`)
   - SSRF protection against private IPv4 addresses and cloud metadata services (`169.254.169.254`)
   - Parameterized SQLite queries preventing SQL Injection
-- **🎨 Glassmorphic UI**: Ultra-clean responsive dark theme with CSS variables and micro-animations.
+- **🎨 Clean Light UI**: Ultra-clean responsive light theme inspired by modern developer portfolios with subtle micro-grid, crisp typography, and micro-animations.
 
 ---
 
@@ -26,7 +26,7 @@ A modern, high-performance, full-stack URL shortener featuring instant **Guest Q
 - **Backend**: Node.js, Express.js
 - **Database**: SQLite with `better-sqlite3` (WAL mode enabled)
 - **Security**: `helmet`, `express-rate-limit`, `bcryptjs`, `jsonwebtoken`, `cors`
-- **Frontend**: Vanilla JavaScript (ES Modules), HTML5, CSS3 Glassmorphism, `qrcode`
+- **Frontend**: Vanilla JavaScript (ES Modules), HTML5, CSS3, `qrcode`
 
 ---
 
@@ -104,8 +104,3 @@ npm test
   pm2 start server/server.js --name "makemeshort"
   pm2 startup && pm2 save
   ```
-
----
-
-## 📄 License
-MIT License
