@@ -3,168 +3,339 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MakeMeShort — Modern High-Speed URL Shortener</title>
-  <meta name="description" content="Instantly shorten, manage, and track URLs with custom slugs, QR codes, and real-time analytics. Quick guest mode with zero login required.">
+  <title>MakeMeShort — Fast, Modern URL Shortener & Link Analytics</title>
+  <meta name="description" content="Instantly shorten, manage, and track URLs with dynamic QR codes, custom slugs, and real-time analytics. Quick guest mode with zero signup required.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Newsreader:ital,opsz,wght@1,6..72,400;1,6..72,500;1,6..72,600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/main.css">
   <link rel="stylesheet" href="/css/landing.css">
 </head>
 <body>
 
-  <!-- Navigation Bar -->
-  <header class="navbar container">
-    <a href="/" class="brand-logo">
-      <div class="brand-icon">
-        <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
-        </svg>
+  <!-- Sticky Top Navbar -->
+  <div class="navbar-wrapper">
+    <header class="navbar container">
+      <a href="/" class="brand-logo">
+        <div class="brand-icon">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+          </svg>
+        </div>
+        <span>MakeMeShort</span>
+      </a>
+      
+      <div class="nav-actions" id="nav-user-area">
+        <!-- Dynamically populated by auth.js -->
+        <button id="open-login-btn" class="btn btn-ghost btn-sm">Sign In</button>
+        <button id="open-register-btn" class="btn btn-primary btn-sm">Get Started</button>
       </div>
-      <span>MakeMeShort</span>
-    </a>
-    <div class="nav-actions" id="nav-user-area">
-      <!-- Dynamically populated by auth.js -->
-      <button id="open-login-btn" class="btn btn-ghost btn-sm">Sign In</button>
-      <button id="open-register-btn" class="btn btn-primary btn-sm">Get Started</button>
-    </div>
-  </header>
+    </header>
+  </div>
 
-  <!-- Hero Section -->
   <main class="container">
+    <!-- Hero Section -->
     <section class="hero">
       <div class="hero-badge">
-        <span class="pulse-dot"></span>
-        <span>Instant Shortening • No Account Required</span>
+        <span class="badge-pulse-dot"></span>
+        <span>Instant Shortening • Zero Registration Required</span>
       </div>
+
       <h1 class="hero-title">
-        Shorten Links, <br>
-        <span class="gradient-text">Expand Possibilities</span>
+        Shorten Links, <span class="serif-italic">effortlessly</span> <br>
+        expand your reach.
       </h1>
+
       <p class="hero-subtitle">
-        Create clean, memorable links in seconds. Generate instant QR codes, track visits in real-time, and manage custom vanity slugs.
+        Transform long, clunky URLs into clean, memorable links in milliseconds. Generate dynamic QR codes, track real-time click analytics, and claim custom slugs.
       </p>
 
-      <!-- Quick Shortener Box -->
-      <div class="glass-card shortener-box">
-        <form id="landing-shorten-form" class="shortener-form">
-          <div class="url-input-wrapper">
-            <span class="url-input-icon">
-              <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/></svg>
-            </span>
-            <input 
-              type="text" 
-              id="landing-url-input" 
-              class="shortener-input" 
-              placeholder="Paste your long link here (e.g., https://example.com/very/long/url)..." 
-              autocomplete="off" 
-              required
-            />
-            <button type="button" id="paste-btn" class="paste-btn" title="Paste from clipboard">PASTE</button>
-          </div>
-          <button type="submit" id="landing-submit-btn" class="btn btn-primary shorten-submit-btn">
-            <span>Shorten URL</span>
-            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+      <!-- Main Link Shortening & QR Box (Inspired by Bitly + Portfolio Aesthetic) -->
+      <div class="shortener-container">
+        <!-- Tabs Header -->
+        <div class="shortener-tabs-bar">
+          <button type="button" class="tab-pill active" id="tab-short-link">
+            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+            </svg>
+            <span>Short Link</span>
           </button>
-        </form>
+          <button type="button" class="tab-pill" id="tab-qr-code">
+            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/>
+            </svg>
+            <span>QR Code</span>
+          </button>
+        </div>
 
-        <!-- Result Box (Hidden by default) -->
-        <div id="landing-result-card" class="result-card" style="display: none;">
-          <div class="result-info">
-            <span class="result-original" id="result-orig-url"></span>
-            <a href="#" target="_blank" id="result-short-url" class="result-short-url"></a>
+        <!-- Main Card Surface -->
+        <div class="glass-card shortener-card">
+          <!-- Short Link Panel -->
+          <div id="panel-short-link" class="tab-panel active">
+            <div class="panel-header">
+              <h2 class="panel-title">Shorten a long link</h2>
+              <p class="panel-subtitle">No credit card required. Free guest shortening with dynamic QR code.</p>
+            </div>
+
+            <form id="landing-shorten-form" class="shortener-form">
+              <div class="input-field-block">
+                <label for="landing-url-input" class="field-label">Paste your long link here</label>
+                
+                <div class="url-input-wrapper">
+                  <span class="url-input-icon">
+                    <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/>
+                    </svg>
+                  </span>
+                  
+                  <input 
+                    type="text" 
+                    id="landing-url-input" 
+                    class="shortener-input" 
+                    placeholder="https://example.com/my-long-url" 
+                    autocomplete="off" 
+                    required
+                  />
+                  
+                  <button type="button" id="paste-btn" class="paste-badge-btn" title="Paste from clipboard">
+                    <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                    </svg>
+                    <span>PASTE</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Action Row with Submit Button & Trust Indicators -->
+              <div class="action-row">
+                <button type="submit" id="landing-submit-btn" class="btn btn-primary shorten-action-btn">
+                  <span>Get your link for free</span>
+                  <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/>
+                  </svg>
+                </button>
+
+                <div class="trust-indicator-group">
+                  <div class="trust-badge">
+                    <span class="stars">★★★★★</span>
+                    <span class="trust-text"><strong>4.9/5</strong> Developer Choice</span>
+                  </div>
+                  <div class="trust-divider"></div>
+                  <div class="trust-badge">
+                    <span class="speed-icon">⚡</span>
+                    <span class="trust-text">&lt; 20ms Redirection</span>
+                  </div>
+                </div>
+              </div>
+            </form>
+
+            <!-- Result Box (Hidden by default, slides down smoothly) -->
+            <div id="landing-result-card" class="result-card" style="display: none;">
+              <div class="result-details">
+                <span class="result-label">YOUR SHORT LINK</span>
+                <a href="#" target="_blank" id="result-short-url" class="result-short-link"></a>
+                <span class="result-dest" id="result-orig-url"></span>
+              </div>
+              <div class="result-buttons">
+                <button id="result-copy-btn" class="btn btn-primary btn-sm">
+                  <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                  </svg>
+                  <span id="copy-btn-text">Copy Link</span>
+                </button>
+                <button id="result-qr-btn" class="btn btn-secondary btn-sm">
+                  <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/>
+                  </svg>
+                  <span>QR Code</span>
+                </button>
+              </div>
+            </div>
           </div>
-          <div class="result-actions">
-            <button id="result-copy-btn" class="btn btn-primary btn-sm">
-              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
-              Copy Link
-            </button>
-            <button id="result-qr-btn" class="btn btn-secondary btn-sm">
-              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/></svg>
-              QR Code
-            </button>
+
+          <!-- Instant QR Code Panel -->
+          <div id="panel-qr-code" class="tab-panel" style="display: none;">
+            <div class="panel-header">
+              <h2 class="panel-title">Dynamic QR Code Generator</h2>
+              <p class="panel-subtitle">Create high-resolution scannable QR codes for any link or text instantly.</p>
+            </div>
+
+            <div class="qr-gen-box">
+              <div class="input-field-block">
+                <label for="direct-qr-input" class="field-label">Enter link or text to generate QR</label>
+                <div class="url-input-wrapper">
+                  <span class="url-input-icon">
+                    <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+                    </svg>
+                  </span>
+                  <input type="text" id="direct-qr-input" class="shortener-input" placeholder="https://example.com/your-page" autocomplete="off" />
+                  <button type="button" id="direct-qr-paste" class="paste-badge-btn" title="Paste from clipboard">
+                    <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                    </svg>
+                    <span>PASTE</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="action-row" style="margin-top: 1.25rem;">
+                <button type="button" id="direct-qr-generate-btn" class="btn btn-primary shorten-action-btn">
+                  <span>Generate QR Code</span>
+                  <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/>
+                  </svg>
+                </button>
+              </div>
+
+              <!-- Direct QR Preview Display -->
+              <div id="direct-qr-result" class="direct-qr-preview" style="display: none;">
+                <div class="qr-box-frame">
+                  <img id="direct-qr-img" src="" alt="Dynamic QR Code">
+                </div>
+                <div class="qr-box-info">
+                  <span class="qr-box-title">High-Resolution PNG QR Code</span>
+                  <p class="qr-box-sub">Ready for print, websites, presentations, and product packaging.</p>
+                  <a id="direct-qr-download" href="#" class="btn btn-primary btn-sm" download="qrcode.png">
+                    <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                    </svg>
+                    <span>Download PNG</span>
+                  </a>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- Guest Recent History -->
+      <!-- Guest Recent History Section -->
       <div id="guest-history-container" class="guest-history-section" style="display: none;">
         <div class="history-header">
-          <h2 class="history-title">
-            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-            Recent Shortened Links
-          </h2>
+          <div class="history-title-group">
+            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <h2 class="history-title">Recent Shortened Links</h2>
+          </div>
           <button id="clear-history-btn" class="btn btn-ghost btn-sm">Clear History</button>
         </div>
-        <div id="guest-history-list"></div>
+        <div id="guest-history-list" class="history-list"></div>
+      </div>
+    </section>
+
+    <!-- Developer Shell & API Showcase (Directly inspired by Screenshot 1) -->
+    <section class="terminal-section">
+      <div class="terminal-card">
+        <div class="terminal-header">
+          <div class="terminal-traffic-lights">
+            <span class="light red"></span>
+            <span class="light yellow"></span>
+            <span class="light green"></span>
+          </div>
+          <div class="terminal-title">sahil@developer: ~ (zsh)</div>
+          <div class="terminal-status-badge">
+            <span class="online-indicator"></span>
+            <span>ONLINE</span>
+          </div>
+        </div>
+        <div class="terminal-body">
+          <div class="term-line prompt-line">
+            <span class="term-user">sahil@makemeshort:~$</span>
+            <span class="term-cmd">curl -X POST https://makemeshort.com/api/urls/shorten \</span>
+          </div>
+          <div class="term-line term-arg">  -H "Content-Type: application/json" \</div>
+          <div class="term-line term-arg">  -d '{"originalUrl": "https://github.com/SahilAi1/makemeshort"}'</div>
+          <div class="term-line term-output">
+            <span class="term-comment"># &lt; 20ms JSON response</span>
+<span class="term-json">{
+  <span class="json-key">"status"</span>: <span class="json-str">"success"</span>,
+  <span class="json-key">"shortUrl"</span>: <span class="json-val-url">"https://makemeshort.com/x8k2p"</span>,
+  <span class="json-key">"clicks"</span>: <span class="json-num">0</span>,
+  <span class="json-key">"qrCode"</span>: <span class="json-str">"data:image/png;base64,..."</span>
+}</span>
+          </div>
+        </div>
       </div>
     </section>
 
     <!-- Stats Banner -->
     <section class="stats-banner">
       <div class="stat-item">
-        <span class="stat-number gradient-text">&lt; 20ms</span>
+        <span class="stat-number">&lt; 20ms</span>
         <span class="stat-label">Ultra-Fast Redirection</span>
       </div>
       <div class="stat-item">
-        <span class="stat-number gradient-text">100%</span>
+        <span class="stat-number">100%</span>
         <span class="stat-label">Privacy Preserved</span>
       </div>
       <div class="stat-item">
-        <span class="stat-number gradient-text">Free</span>
+        <span class="stat-number">Free</span>
         <span class="stat-label">Instant Guest Access</span>
       </div>
       <div class="stat-item">
-        <span class="stat-number gradient-text">HD</span>
+        <span class="stat-number">HD</span>
         <span class="stat-label">Dynamic QR Codes</span>
       </div>
     </section>
 
-    <!-- Features Grid -->
+    <!-- Features Bento Grid -->
     <section class="features-section">
       <div class="section-header">
-        <p class="section-tag">Powerful Capabilities</p>
-        <h2 class="section-title">Engineered for Speed & Simplicity</h2>
+        <div class="badge badge-blue">Powerful Capabilities</div>
+        <h2 class="section-title">Engineered for speed, built for reliability</h2>
+        <p class="section-desc">Everything you need from high-performance link redirection to detailed analytics.</p>
       </div>
+
       <div class="features-grid">
         <div class="feature-card">
-          <div class="feature-icon-wrapper">⚡</div>
+          <div class="feature-icon-pill">⚡</div>
           <h3 class="feature-heading">Instant Quick-Use</h3>
-          <p class="feature-desc">Shorten links on the fly without any mandatory registration. Seamlessly copy links and view QR codes in one tap.</p>
+          <p class="feature-desc">Shorten links immediately with zero mandatory registration. Copy links and download crisp QR codes in one click.</p>
         </div>
+
         <div class="feature-card">
-          <div class="feature-icon-wrapper">🎯</div>
+          <div class="feature-icon-pill">🎯</div>
           <h3 class="feature-heading">Custom Vanity Slugs</h3>
-          <p class="feature-desc">Create personalized links like <code>/my-brand</code> or <code>/launch</code> to increase click-through rates and build trust.</p>
+          <p class="feature-desc">Create branded, memorable links like <code>makemeshort.com/portfolio</code> to increase click-through rates and build trust.</p>
         </div>
+
         <div class="feature-card">
-          <div class="feature-icon-wrapper">📊</div>
+          <div class="feature-icon-pill">📊</div>
           <h3 class="feature-heading">Real-Time Analytics</h3>
-          <p class="feature-desc">Track clicks, referrers, and visitor trends. Gain insights on how your links perform across platforms.</p>
+          <p class="feature-desc">Monitor total visits, referrers, and browser information. Gain actionable insights on link traffic.</p>
         </div>
+
         <div class="feature-card">
-          <div class="feature-icon-wrapper">📱</div>
-          <h3 class="feature-heading">High-Res QR Codes</h3>
-          <p class="feature-desc">Automatically generate crisp QR codes ready for download and physical or digital marketing materials.</p>
+          <div class="feature-icon-pill">📱</div>
+          <h3 class="feature-heading">High-Res Dynamic QR Codes</h3>
+          <p class="feature-desc">Automatic generation of clean, scannable QR codes ready for print, social media, and digital campaigns.</p>
         </div>
+
         <div class="feature-card">
-          <div class="feature-icon-wrapper">🛡️</div>
+          <div class="feature-icon-pill">🛡️</div>
           <h3 class="feature-heading">Link Controls & Toggles</h3>
-          <p class="feature-desc">Easily update destination URLs or temporarily disable links anytime from your centralized user dashboard.</p>
+          <p class="feature-desc">Update destination URLs or deactivate links with a single click anytime from your user dashboard.</p>
         </div>
+
         <div class="feature-card">
-          <div class="feature-icon-wrapper">🔒</div>
-          <h3 class="feature-heading">Secure & Reliable</h3>
-          <p class="feature-desc">Protected by industry-standard bcrypt hashing, JWT authentication, and collision-resistant Base62 generation.</p>
+          <div class="feature-icon-pill">🔒</div>
+          <h3 class="feature-heading">Enterprise Security</h3>
+          <p class="feature-desc">Hardened with Helmet HTTP headers, SSRF protections, bcrypt encryption, and rate limiting against spam.</p>
         </div>
       </div>
     </section>
   </main>
 
-  <!-- Footer -->
+  <!-- Clean Minimalist Footer -->
   <footer class="footer">
     <div class="container footer-content">
       <div class="brand-logo">
+        <div class="brand-icon">
+          <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+          </svg>
+        </div>
         <span>MakeMeShort</span>
       </div>
       <p>A modern, high-speed URL shortening and link management platform.</p>
@@ -176,43 +347,48 @@
     <div class="modal-container">
       <div class="modal-header">
         <h3 class="modal-title" id="auth-modal-title">Welcome Back</h3>
-        <button class="modal-close" id="auth-modal-close">✕</button>
+        <button class="modal-close" id="auth-modal-close" aria-label="Close modal">✕</button>
       </div>
-      <div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem;">
-        <button id="tab-login" class="btn btn-primary btn-sm" style="flex: 1;">Sign In</button>
-        <button id="tab-register" class="btn btn-ghost btn-sm" style="flex: 1;">Sign Up</button>
+
+      <div class="auth-tabs">
+        <button id="tab-login" class="btn btn-primary btn-sm auth-tab-btn">Sign In</button>
+        <button id="tab-register" class="btn btn-secondary btn-sm auth-tab-btn">Sign Up</button>
       </div>
+
       <form id="auth-form">
         <div class="input-group">
-          <label class="input-label" id="auth-login-label">Username or Email</label>
-          <input type="text" id="auth-login-input" class="input-field" placeholder="e.g. sahil or sahil@example.com" required>
+          <label class="input-label" id="auth-login-label" for="auth-login-input">Username or Email</label>
+          <input type="text" id="auth-login-input" class="input-field" placeholder="e.g. alexdev or alex@example.com" required>
         </div>
+
         <div class="input-group register-only" style="display: none;">
-          <label class="input-label">Email Address</label>
-          <input type="email" id="auth-email-input" class="input-field" placeholder="yourname@example.com">
+          <label class="input-label" for="auth-email-input">Email Address</label>
+          <input type="email" id="auth-email-input" class="input-field" placeholder="alex@example.com">
         </div>
+
         <div class="input-group">
-          <label class="input-label">Password</label>
+          <label class="input-label" for="auth-password-input">Password</label>
           <input type="password" id="auth-password-input" class="input-field" placeholder="••••••••" required>
         </div>
-        <button type="submit" id="auth-submit-btn" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Sign In</button>
+
+        <button type="submit" id="auth-submit-btn" class="btn btn-primary btn-lg" style="width: 100%; margin-top: 1rem;">Sign In</button>
       </form>
     </div>
   </div>
 
   <!-- QR Code Modal -->
   <div class="modal-overlay" id="qr-modal">
-    <div class="modal-container" style="max-width: 380px;">
+    <div class="modal-container" style="max-width: 400px; text-align: center;">
       <div class="modal-header">
         <h3 class="modal-title">QR Code</h3>
-        <button class="modal-close" id="qr-modal-close">✕</button>
+        <button class="modal-close" id="qr-modal-close" aria-label="Close modal">✕</button>
       </div>
       <div class="qr-modal-body">
         <div class="qr-image-frame">
-          <img id="qr-modal-image" src="" alt="QR Code">
+          <img id="qr-modal-image" src="" alt="Short Link QR Code">
         </div>
         <div id="qr-modal-url" class="qr-url-text"></div>
-        <div style="display: flex; gap: 0.75rem; width: 100%;">
+        <div style="display: flex; gap: 0.75rem; width: 100%; margin-top: 1.5rem;">
           <a id="qr-modal-download" class="btn btn-primary btn-sm" style="flex: 1;" download="qrcode.png">Download PNG</a>
           <button id="qr-modal-copy" class="btn btn-secondary btn-sm" style="flex: 1;">Copy Link</button>
         </div>

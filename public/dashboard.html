@@ -6,33 +6,35 @@
   <title>Dashboard — MakeMeShort</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Newsreader:ital,opsz,wght@1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/main.css">
   <link rel="stylesheet" href="/css/dashboard.css">
 </head>
 <body>
 
-  <!-- Navigation Bar -->
-  <header class="navbar container">
-    <a href="/" class="brand-logo">
-      <div class="brand-icon">
-        <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
-        </svg>
+  <!-- Sticky Navigation Bar -->
+  <div class="navbar-wrapper">
+    <header class="navbar container">
+      <a href="/" class="brand-logo">
+        <div class="brand-icon">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+          </svg>
+        </div>
+        <span>MakeMeShort</span>
+      </a>
+      <div class="nav-actions" id="nav-user-area">
+        <!-- Managed by auth.js -->
       </div>
-      <span>MakeMeShort</span>
-    </a>
-    <div class="nav-actions" id="nav-user-area">
-      <!-- Managed by auth.js -->
-    </div>
-  </header>
+    </header>
+  </div>
 
   <main class="container dashboard-wrapper">
     <!-- Header -->
     <div class="dashboard-header">
       <div>
         <h1 class="user-welcome-title">Dashboard</h1>
-        <p class="user-welcome-sub">Welcome back, <span id="user-welcome-name" style="color: #38bdf8; font-weight: 600;">User</span>! Manage your links and track real-time analytics.</p>
+        <p class="user-welcome-sub">Welcome back, <span id="user-welcome-name" class="user-name-highlight">User</span>! Manage links, aliases, and track real-time analytics.</p>
       </div>
       <a href="/" class="btn btn-secondary btn-sm">
         <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
@@ -44,7 +46,7 @@
     <section class="stats-grid">
       <div class="stat-card">
         <div class="stat-card-icon icon-blue">
-          <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
+          <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
         </div>
         <div class="stat-card-info">
           <span class="stat-card-value" id="stat-total-links">0</span>
@@ -54,7 +56,7 @@
 
       <div class="stat-card">
         <div class="stat-card-icon icon-purple">
-          <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+          <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
         </div>
         <div class="stat-card-info">
           <span class="stat-card-value" id="stat-total-clicks">0</span>
@@ -64,7 +66,7 @@
 
       <div class="stat-card">
         <div class="stat-card-icon icon-green">
-          <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
         </div>
         <div class="stat-card-info">
           <span class="stat-card-value" id="stat-active-links">0</span>
@@ -74,7 +76,7 @@
 
       <div class="stat-card">
         <div class="stat-card-icon icon-orange">
-          <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+          <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
         </div>
         <div class="stat-card-info">
           <span class="stat-card-value" id="stat-avg-clicks">0</span>
@@ -87,26 +89,27 @@
     <section class="glass-card create-link-card">
       <div class="create-link-header">
         <h2 class="create-link-title">Create a New Short Link</h2>
+        <p class="create-link-sub">Generate tracked links with custom vanity slugs and automatic QR codes.</p>
       </div>
       <form id="dashboard-create-form">
         <div class="create-link-grid">
           <div class="input-group" style="margin-bottom: 0;">
-            <label class="input-label">Destination Long URL *</label>
+            <label class="input-label" for="create-url-input">Destination Long URL *</label>
             <input type="text" id="create-url-input" class="input-field" placeholder="https://mywebsite.com/long-page" required>
           </div>
           <div class="input-group" style="margin-bottom: 0;">
-            <label class="input-label">Custom Alias / Slug (Optional)</label>
+            <label class="input-label" for="create-slug-input">Custom Alias / Slug (Optional)</label>
             <div class="slug-input-wrapper">
               <span class="slug-prefix">/</span>
               <input type="text" id="create-slug-input" class="input-field slug-input" placeholder="my-custom-slug">
             </div>
           </div>
           <div class="input-group" style="margin-bottom: 0;">
-            <label class="input-label">Title / Note (Optional)</label>
+            <label class="input-label" for="create-title-input">Title / Note (Optional)</label>
             <input type="text" id="create-title-input" class="input-field" placeholder="e.g. Campaign Link">
           </div>
         </div>
-        <button type="submit" id="create-submit-btn" class="btn btn-primary" style="margin-top: 1.25rem;">
+        <button type="submit" id="create-submit-btn" class="btn btn-primary" style="margin-top: 1.5rem;">
           <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
           Create Short Link
         </button>
@@ -116,7 +119,10 @@
     <!-- Links Management Section -->
     <section>
       <div class="links-section-header">
-        <h2 style="font-size: 1.35rem; font-weight: 700; color: #ffffff;">Your Shortened Links</h2>
+        <div>
+          <h2 class="section-heading">Your Shortened Links</h2>
+          <p class="section-subheading">View traffic analytics, edit destinations, toggle states, or download QR codes.</p>
+        </div>
         <div class="links-filters">
           <div class="links-search-bar">
             <input type="text" id="search-links-input" class="input-field" placeholder="Search by title, URL or slug..." style="padding: 0.55rem 0.85rem;">
@@ -143,17 +149,17 @@
 
   <!-- QR Code Modal -->
   <div class="modal-overlay" id="qr-modal">
-    <div class="modal-container" style="max-width: 380px;">
+    <div class="modal-container" style="max-width: 400px; text-align: center;">
       <div class="modal-header">
         <h3 class="modal-title">QR Code</h3>
-        <button class="modal-close" id="qr-modal-close">✕</button>
+        <button class="modal-close" id="qr-modal-close" aria-label="Close modal">✕</button>
       </div>
       <div class="qr-modal-body">
         <div class="qr-image-frame">
           <img id="qr-modal-image" src="" alt="QR Code">
         </div>
         <div id="qr-modal-url" class="qr-url-text"></div>
-        <div style="display: flex; gap: 0.75rem; width: 100%;">
+        <div style="display: flex; gap: 0.75rem; width: 100%; margin-top: 1.5rem;">
           <a id="qr-modal-download" class="btn btn-primary btn-sm" style="flex: 1;" download="qrcode.png">Download PNG</a>
           <button id="qr-modal-copy" class="btn btn-secondary btn-sm" style="flex: 1;">Copy Link</button>
         </div>
@@ -164,12 +170,12 @@
   <!-- Analytics Modal -->
   <div class="modal-overlay" id="analytics-modal">
     <div class="modal-container analytics-modal-container">
-      <div class="modal-header" style="margin-bottom: 1rem;">
+      <div class="modal-header" style="margin-bottom: 1.25rem;">
         <div>
           <h3 class="modal-title" id="analytics-link-title">Link Analytics</h3>
-          <a href="#" target="_blank" id="analytics-short-url" style="font-size: 0.85rem; color: #38bdf8; font-weight: 600; word-break: break-all;"></a>
+          <a href="#" target="_blank" id="analytics-short-url" style="font-size: 0.875rem; color: var(--primary); font-weight: 600; word-break: break-all;"></a>
         </div>
-        <button class="modal-close" id="analytics-modal-close">✕</button>
+        <button class="modal-close" id="analytics-modal-close" aria-label="Close modal">✕</button>
       </div>
       <div class="analytics-content-scroll">
         <div class="analytics-summary-box">
@@ -178,24 +184,24 @@
             <div class="analytics-stat-lbl">Total Visits</div>
           </div>
           <div class="analytics-stat-tile">
-            <div class="analytics-stat-num" id="analytics-created" style="font-size: 1.1rem; margin-top: 0.25rem;">—</div>
+            <div class="analytics-stat-num" id="analytics-created" style="font-size: 1.05rem; margin-top: 0.25rem;">—</div>
             <div class="analytics-stat-lbl">Date Created</div>
           </div>
           <div class="analytics-stat-tile">
-            <div class="analytics-stat-num" id="analytics-top-device" style="font-size: 1.1rem; margin-top: 0.25rem;">—</div>
+            <div class="analytics-stat-num" id="analytics-top-device" style="font-size: 1.05rem; margin-top: 0.25rem;">—</div>
             <div class="analytics-stat-lbl">Top Device</div>
           </div>
         </div>
 
-        <div>
-          <h4 style="font-size: 0.825rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem;">Platform & Referrer Insights</h4>
+        <div style="margin-top: 1.5rem;">
+          <h4 style="font-size: 0.85rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.75rem;">Platform & Referrer Insights</h4>
           <div id="analytics-breakdowns" class="analytics-breakdown-row"></div>
         </div>
 
-        <div>
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem;">
-            <h4 style="font-size: 0.825rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Click History Log</h4>
-            <span style="font-size: 0.75rem; color: var(--text-subtle);">Click row for full headers</span>
+        <div style="margin-top: 1.5rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+            <h4 style="font-size: 0.85rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Click History Log</h4>
+            <span style="font-size: 0.75rem; color: var(--text-subtle);">Click row for details</span>
           </div>
           <div id="analytics-logs-list" class="clicks-history-list"></div>
         </div>
@@ -208,26 +214,26 @@
     <div class="modal-container">
       <div class="modal-header">
         <h3 class="modal-title">Edit Short Link</h3>
-        <button class="modal-close" id="edit-modal-close">✕</button>
+        <button class="modal-close" id="edit-modal-close" aria-label="Close modal">✕</button>
       </div>
       <form id="edit-form">
         <input type="hidden" id="edit-link-id">
         <div class="input-group">
-          <label class="input-label">Title / Name</label>
+          <label class="input-label" for="edit-title-input">Title / Name</label>
           <input type="text" id="edit-title-input" class="input-field" required>
         </div>
         <div class="input-group">
-          <label class="input-label">Destination URL</label>
+          <label class="input-label" for="edit-url-input">Destination URL</label>
           <input type="text" id="edit-url-input" class="input-field" required>
         </div>
         <div class="input-group">
-          <label class="input-label">Link Status</label>
+          <label class="input-label" for="edit-status-input">Link Status</label>
           <select id="edit-status-input" class="input-field">
             <option value="1">Active (Redirecting)</option>
             <option value="0">Disabled (Deactivated)</option>
           </select>
         </div>
-        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Save Changes</button>
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1.25rem;">Save Changes</button>
       </form>
     </div>
   </div>
